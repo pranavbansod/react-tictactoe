@@ -15,7 +15,6 @@ class Board extends Component {
         let squares = this.state.squares;
         squares[index] = 'X';
         this.setState({squares: squares});
-        console.log(this.state.squares)
     }
 
     renderSquare(index) {
