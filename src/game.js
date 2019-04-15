@@ -16,11 +16,14 @@ class Board extends Component {
 
     handleClick(index) {
         let squares = this.state.squares.slice();
-        squares[index] = this.state.isXNext ? 'X' : 'O';
-        this.setState({
-            squares: squares,
-            isXNext: !this.state.isXNext,
-        });
+        let isSquareNull = squares[index] == null;
+        if(isSquareNull){
+            squares[index] = this.state.isXNext ? 'X' : 'O';
+            this.setState({
+                squares: squares,
+                isXNext: !this.state.isXNext,
+            });
+        }
     }
 
     renderSquare(index) {
