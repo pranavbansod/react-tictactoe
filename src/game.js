@@ -8,11 +8,22 @@ import Square from './square';
 class Board extends Component {
     constructor(props) {
         super(props);
-        this.state = {squares: Array(9).fill('X')}
+        this.state = {squares: Array(9).fill(null)}
+    }
+
+    handleClick(index) {
+        let squares = this.state.squares;
+        squares[index] = 'X';
+        this.setState({squares: squares});
+        console.log(this.state.squares)
     }
 
     renderSquare(index) {
-        return <Square key={index} id={index} value={this.state.squares[index]}></Square>
+        return <Square
+            key={index}
+            value={this.state.squares[index]}
+            onClick={() => this.handleClick(index)}
+        />
     }
 
     render() {
@@ -28,6 +39,7 @@ class Board extends Component {
             </div>
         </div>;
     }
+
 }
 
 export default Board;
