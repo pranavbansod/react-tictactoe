@@ -14,6 +14,12 @@ class Board extends Component {
         };
     }
 
+    hasGameEnded() {
+        let isWon = this.isWinner('X') || this.isWinner('O');
+
+        return isWon
+    }
+
     isWinner(symbol) {
         const winningCombIndex = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
         let squares = this.state.squares;
@@ -30,6 +36,9 @@ class Board extends Component {
     }
 
     async handleClick(index) {
+        if(this.hasGameEnded()){
+            return
+        }
         let squares = this.state.squares.slice();
         let isSquareEmpty = squares[index] == null;
         if (isSquareEmpty) {
@@ -39,7 +48,6 @@ class Board extends Component {
                 squares: squares,
                 isXNext: !this.state.isXNext,
             });
-            this.isWinner(symbol);
         }
     }
 
@@ -67,7 +75,6 @@ class Board extends Component {
             </div>
         </div>;
     }
-
 }
 
 export default Board;
