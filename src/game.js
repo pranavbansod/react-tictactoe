@@ -8,13 +8,19 @@ import Square from './square';
 class Board extends Component {
     constructor(props) {
         super(props);
-        this.state = {squares: Array(9).fill(null)}
+        this.state = {
+            squares: Array(9).fill(null),
+            isXNext : true
+        };
     }
 
     handleClick(index) {
-        let squares = this.state.squares;
-        squares[index] = 'X';
-        this.setState({squares: squares});
+        let squares = this.state.squares.slice();
+        squares[index] = this.state.isXNext ? 'X' : 'O';
+        this.setState({
+            squares: squares,
+            isXNext: !this.state.isXNext,
+        });
     }
 
     renderSquare(index) {
@@ -26,7 +32,10 @@ class Board extends Component {
     }
 
     render() {
+        const status = 'Next player: ' + (this.state.isXNext ? 'X' : 'O');
+
         return <div>
+            <div className="status">{status}</div>
             <div className={'row'}>
                 {[0, 1, 2].map((i) => this.renderSquare(i))}
             </div>
