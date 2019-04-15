@@ -10,19 +10,36 @@ class Board extends Component {
         super(props);
         this.state = {
             squares: Array(9).fill(null),
-            isXNext : true
+            isXNext: true
         };
     }
 
-    handleClick(index) {
+    isWinner(symbol) {
+        const winningCombIndex = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+        let squares = this.state.squares;
+        function isEqualToSymbol(value) {
+            return value === symbol;
+        }
+        return winningCombIndex.some(function (currCombIndex) {
+            let winningCombination = [];
+            currCombIndex.forEach((index) => {
+                winningCombination.push(squares[index])
+            });
+            return winningCombination.every(isEqualToSymbol)
+        });
+    }
+
+    async handleClick(index) {
         let squares = this.state.squares.slice();
-        let isSquareNull = squares[index] == null;
-        if(isSquareNull){
-            squares[index] = this.state.isXNext ? 'X' : 'O';
-            this.setState({
+        let isSquareEmpty = squares[index] == null;
+        if (isSquareEmpty) {
+            let symbol = this.state.isXNext ? 'X' : 'O';
+            squares[index] = symbol;
+            await this.setState({
                 squares: squares,
                 isXNext: !this.state.isXNext,
             });
+            this.isWinner(symbol);
         }
     }
 
