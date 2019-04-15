@@ -10,22 +10,25 @@ class Board extends Component {
         super(props);
         this.state = {
             squares: Array(9).fill(null),
-            isXNext: true
+            isXNext: true,
+            winnerMessage:null
         };
     }
 
     hasGameEnded() {
         let isWon = this.isWinner('X') || this.isWinner('O');
-
+        this.setState({isWon: isWon});
         return isWon
     }
 
     isWinner(symbol) {
         const winningCombIndex = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
         let squares = this.state.squares;
+
         function isEqualToSymbol(value) {
             return value === symbol;
         }
+
         return winningCombIndex.some(function (currCombIndex) {
             let winningCombination = [];
             currCombIndex.forEach((index) => {
@@ -36,18 +39,20 @@ class Board extends Component {
     }
 
     async handleClick(index) {
-        if(this.hasGameEnded()){
-            return
+        if (this.state.isWon) {
+            return;
         }
         let squares = this.state.squares.slice();
         let isSquareEmpty = squares[index] == null;
         if (isSquareEmpty) {
             let symbol = this.state.isXNext ? 'X' : 'O';
             squares[index] = symbol;
-            await this.setState({
-                squares: squares,
-                isXNext: !this.state.isXNext,
-            });
+            await this.setState({squares: squares});
+            if(!this.hasGameEnded()){
+                await this.setState({isXNext: !this.state.isXNext});
+            } else {
+                await this.setState({winnerMessage : `Winner is ${this.state.isXNext ? 'X' : 'O'}`})
+            }
         }
     }
 
@@ -63,7 +68,7 @@ class Board extends Component {
         const status = 'Next player: ' + (this.state.isXNext ? 'X' : 'O');
 
         return <div>
-            <div className="status">{status}</div>
+            <div className="status">{this.state.winnerMessage || status}</div>
             <div className={'row'}>
                 {[0, 1, 2].map((i) => this.renderSquare(i))}
             </div>
